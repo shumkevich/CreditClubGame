@@ -1,0 +1,46 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #1c1e21;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.game-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    padding: 24px;
+    text-align: center;
+}
+
+.game-text {
+    font-size: 1.1em;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    white-space: pre-wrap; /* Сохраняет переносы строк из текста */
+}
+
+.game-choices button {
+    background-color: #1877f2; /* Фирменный синий, можно поменять */
+    border: none;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 12px 20px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.game-choices button:hover {
+    background-color: #166fe5;
+}
