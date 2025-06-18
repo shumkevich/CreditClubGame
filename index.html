@@ -4,13 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Квест "КредитКлаб"</title>
+    <!-- Шрифты можно оставить, если нравятся, или убрать -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <div id="game-text" class="game-text"></div>
-        <div id="game-choices" class="game-choices"></div>
+    <!-- Этот контейнер будет нашим "экраном" 16:9 -->
+    <div class="game-world">
+        
+        <!-- Зона для изображения -->
+        <div class="image-container">
+            <img id="game-image" src="" alt="Иллюстрация к сцене">
+        </div>
+
+        <!-- Зона для текста -->
+        <div class="text-container">
+            <p id="game-text"></p>
+        </div>
+
+        <!-- Зона для кнопок -->
+        <div class="choices-container">
+            <div id="game-choices">
+                <!-- Кнопки и чекбоксы будут генерироваться здесь -->
+            </div>
+        </div>
+
     </div>
+
     <script src="quest.js"></script>
     <script src="script.js"></script>
 </body>
