@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест "КредитКлаб"</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- НОВЫЙ ЭКРАН: Ввод имени -->
+    <div id="name-entry-screen" class="name-entry-screen">
+        <h2>Добро пожаловать в "Кредит.Клаб"</h2>
+        <p>Чтобы начать обучение, представьтесь, пожалуйста.</p>
+        <input type="text" id="player-name-input" placeholder="Введите ваше имя">
+        <button id="confirm-name-button">Начать</button>
+    </div>
+
+    <!-- Основной игровой экран (изначально будет скрыт) -->
+    <div id="game-world" class="game-world hidden">
+        <div class="image-container">
+            <img id="game-image" src="" alt="Иллюстрация к сцене">
+        </div>
+        <div class="text-container">
+            <p id="game-text"></p>
+        </div>
+        <div class="choices-container">
+            <div id="game-choices"></div>
+        </div>
+    </div>
+
+    <script src="quest.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
