@@ -8,6 +8,8 @@ const gameTextElement = document.getElementById('game-text');
 const gameChoicesElement = document.getElementById('game-choices');
 const gameImageElement = document.getElementById('game-image');
 
+// Контейнер кнопки "Назад", а не сама кнопка
+const backButtonContainer = document.getElementById('navigation-container'); 
 const backButton = document.getElementById('back-button');
 const pswpElement = document.querySelector('.pswp');
 
@@ -20,86 +22,36 @@ let sceneHistory = [];
 
 
 // ================== ЛОГИКА ДЛЯ ПРОСМОТРА ИЗОБРАЖЕНИЙ ==================
-
-// НАШ ГЛАВНЫЙ ПАРАМЕТР 'ТОНКОСТИ' УПРАВЛЕНИЯ.
-// Чем он ближе к 1, тем меньше шаг зума.
-// 1.1 - очень плавно, 1.2 - средне, 1.4 - быстро.
 const ZOOM_STEP_FACTOR = 1.15; 
-
 gameImageElement.addEventListener('click', () => {
-    if (!gameImageElement.getAttribute('src')) {
-        return;
-    }
-
-    // Опции для PhotoSwipe, в которых мы отключаем стандартный зум колесом
+    if (!gameImageElement.getAttribute('src')) { return; }
     const options = {
-        index: 0,
-        history: false,
-        closeOnScroll: false,
-        
-        // Полностью отключаем все стандартные механики зума колесом!
-        mouseUsed: false, 
-        wheelToZoom: false,
-
-        // Оставляем наши настройки для клика/тапа и максимального зума
-        maxSpreadZoom: 4,
+        index: 0, history: false, closeOnScroll: false,
+        mouseUsed: false, wheelToZoom: false, maxSpreadZoom: 4,
         getDoubleTapZoom: function(isMouseClick, item) {
-            if (item.currZoomLevel > item.initialZoomLevel) {
-                return item.initialZoomLevel;
-            }
+            if (item.currZoomLevel > item.initialZoomLevel) { return item.initialZoomLevel; }
             return item.initialZoomLevel * 2.5;
         }
     };
-    
-    const items = [{
-        src: gameImageElement.src,
-        w: gameImageElement.naturalWidth,
-        h: gameImageElement.naturalHeight
-    }];
-
-    // Создаем галерею
+    const items = [{ src: gameImageElement.src, w: gameImageElement.naturalWidth, h: gameImageElement.naturalHeight }];
     const gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
-
-    // --- НАША УЛУЧШЕННАЯ ЛОГИКА РУЧНОГО ЗУМА ---
-
-    let wheelHandler; // Переменная для хранения нашей функции
-
-    // 'afterInit' срабатывает, когда галерея создана
+    let wheelHandler;
     gallery.listen('afterInit', function() {
-        const pswp = gallery; // Получаем доступ к объекту галереи
-
-        // Создаем нашу функцию-обработчик
+        const pswp = gallery;
         wheelHandler = function(e) {
-            e.preventDefault(); // Предотвращаем стандартное поведение
-
+            e.preventDefault();
             const isZoomingIn = e.deltaY < 0;
             let currentZoom = pswp.getZoomLevel();
-            let newZoom;
-
-            if (isZoomingIn) {
-                newZoom = currentZoom * ZOOM_STEP_FACTOR;
-            } else {
-                newZoom = currentZoom / ZOOM_STEP_FACTOR;
-            }
-            
-            // Плавно зумируем к нужной точке, ориентируясь на положение курсора
+            let newZoom = isZoomingIn ? currentZoom * ZOOM_STEP_FACTOR : currentZoom / ZOOM_STEP_FACTOR;
             pswp.zoomTo(newZoom, { x: e.clientX, y: e.clientY }, 200);
         };
-
-        // Подключаем наш обработчик к контейнеру галереи
         pswp.framework.container.addEventListener('wheel', wheelHandler, { passive: false });
     });
-
-    // 'destroy' срабатывает, когда галерея закрывается
     gallery.listen('destroy', function() {
-        const pswp = gallery;
-        // ОБЯЗАТЕЛЬНО удаляем наш обработчик, чтобы не было утечек памяти
-        if (wheelHandler && pswp.framework.container) {
-            pswp.framework.container.removeEventListener('wheel', wheelHandler);
+        if (wheelHandler && gallery.framework.container) {
+            gallery.framework.container.removeEventListener('wheel', wheelHandler);
         }
     });
-
-    // Запускаем галерею
     gallery.init();
 });
 
@@ -133,16 +85,13 @@ function renderScene(sceneName, isGoingBack = false) {
         sceneHistory.push(currentSceneName);
     }
     currentSceneName = sceneName;
-
     const scene = questData[sceneName];
     if (!scene) {
         console.error(`Сцена "${sceneName}" не найдена!`);
         gameTextElement.innerText = `Ошибка: Сцена "${sceneName}" не найдена.`;
         return;
     }
-    
     updateBackButtonVisibility();
-
     if (scene.imageUrl) {
         gameImageElement.src = scene.imageUrl;
         gameImageElement.style.display = 'block';
@@ -150,12 +99,9 @@ function renderScene(sceneName, isGoingBack = false) {
         gameImageElement.src = '';
         gameImageElement.style.display = 'none';
     }
-
     let sceneText = scene.text.replace(/\[PLAYER_NAME\]/g, playerName);
     gameTextElement.innerText = sceneText;
-
     gameChoicesElement.innerHTML = '';
-
     if (scene.type === 'checkbox') {
         renderCheckboxScene(scene);
     } else if (scene.choices) {
@@ -165,28 +111,25 @@ function renderScene(sceneName, isGoingBack = false) {
     }
 }
 
+// ИСПРАВЛЕНА ДЛЯ РАБОТЫ С НОВЫМ HTML
 function updateBackButtonVisibility() {
     if (sceneHistory.length > 0) {
-        backButton.classList.remove('hidden');
+        backButtonContainer.classList.remove('hidden');
     } else {
-        backButton.classList.add('hidden');
+        backButtonContainer.classList.add('hidden');
     }
 }
 
-// Замените эту функцию целиком
 function renderStandardScene(scene) {
     scene.choices.forEach(choice => {
-        // Если у варианта есть поле "link"
         if (choice.link) {
             const link = document.createElement('a');
             link.href = choice.link;
             link.innerText = choice.text;
-            // Атрибуты для безопасности и открытия в новой вкладке
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
             gameChoicesElement.appendChild(link);
         } else {
-            // Иначе создаем обычную кнопку, как и раньше
             const button = document.createElement('button');
             button.innerText = choice.text;
             button.addEventListener('click', () => renderScene(choice.next_scene));
