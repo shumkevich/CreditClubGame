@@ -173,12 +173,25 @@ function updateBackButtonVisibility() {
     }
 }
 
+// Замените эту функцию целиком
 function renderStandardScene(scene) {
     scene.choices.forEach(choice => {
-        const button = document.createElement('button');
-        button.innerText = choice.text;
-        button.addEventListener('click', () => renderScene(choice.next_scene));
-        gameChoicesElement.appendChild(button);
+        // Если у варианта есть поле "link"
+        if (choice.link) {
+            const link = document.createElement('a');
+            link.href = choice.link;
+            link.innerText = choice.text;
+            // Атрибуты для безопасности и открытия в новой вкладке
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            gameChoicesElement.appendChild(link);
+        } else {
+            // Иначе создаем обычную кнопку, как и раньше
+            const button = document.createElement('button');
+            button.innerText = choice.text;
+            button.addEventListener('click', () => renderScene(choice.next_scene));
+            gameChoicesElement.appendChild(button);
+        }
     });
 }
 
