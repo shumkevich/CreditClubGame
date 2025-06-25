@@ -2,7 +2,6 @@
    ОБЩИЕ СТИЛИ (ДЛЯ ВСЕХ ЭКРАНОВ)
    ========================================= */
 :root {
-    /* Задаем базовый размер шрифта для лучшей адаптивности */
     font-size: 16px; 
 }
 
@@ -13,26 +12,22 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Используем min-height для гибкости */
-    padding: 10px; /* Небольшой отступ на случай очень маленьких экранов */
+    min-height: 100vh;
+    padding: 10px;
     box-sizing: border-box;
 }
 
-/* Класс для скрытия элементов */
-.hidden {
-    display: none !important;
-}
+.hidden { display: none !important; }
 
 /* =========================================
    СТИЛИ ДЛЯ ДЕСКТОПА (ШИРОКИЕ ЭКРАНЫ)
    ========================================= */
 
-/* Главный контейнер игры */
 .game-world {
     position: relative;
     background-color: #1a1a1a;
     aspect-ratio: 16 / 9;
-    height: 90vh; /* Немного уменьшим, чтобы был запас */
+    height: 90vh;
     max-height: 90vh;
     max-width: 95vw;
     border-radius: 12px;
@@ -42,19 +37,14 @@ body {
     flex-direction: column;
 }
 
-/* Зона изображения */
-.image-container {
-    height: 55%;
-    flex-shrink: 0;
-}
+.image-container { height: 55%; flex-shrink: 0; }
 #game-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    cursor: zoom-in; /* <--- Строка Зума */
+    cursor: zoom-in;
 }
 
-/* Зона текста */
 .text-container {
     flex-grow: 1;
     display: flex;
@@ -68,13 +58,12 @@ body {
 .text-container::-webkit-scrollbar { display: none; }
 #game-text {
     color: #e0e0e0;
-    font-size: 2.2vh; /* Оставляем vh для десктопа, где высота стабильна */
+    font-size: 2.2vh;
     line-height: 1.5;
     text-align: center;
     white-space: pre-wrap;
 }
 
-/* Зона кнопок */
 .choices-container {
     flex-shrink: 0;
     padding: 2vh 0 3vh 0;
@@ -89,7 +78,7 @@ body {
     align-items: center;
     gap: 1.5vh 1.5vw;
 }
-#game-choices button {
+#game-choices a, #game-choices button {
     font-family: 'Montserrat', sans-serif;
     background: linear-gradient(45deg, #2196F3, #1976D2);
     border: none;
@@ -104,20 +93,19 @@ body {
     flex-grow: 1;
     flex-basis: auto;
     min-width: 150px;
+    text-decoration: none; /* Для ссылок */
+    text-align: center;
 }
-#game-choices button:hover {
+#game-choices a:hover, #game-choices button:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 25px rgba(33, 150, 243, 0.6);
 }
 
-
-/* =========================================
-   ЭКРАН ВВОДА ИМЕНИ (ОБЩИЕ СТИЛИ)
-   ========================================= */
+/* ЭКРАН ВВОДА ИМЕНИ */
 .name-entry-screen {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     padding: 40px;
     background-color: #1a1a1a;
@@ -126,7 +114,11 @@ body {
     color: #e0e0e0;
     width: 90%;
     max-width: 500px;
-    text-align: center;
+    text-align: left;
+}
+.name-entry-screen h2, .name-entry-screen p {
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .name-entry-screen h2 { font-size: 2em; margin-bottom: 10px; }
 .name-entry-screen p { font-size: 1.1em; margin-bottom: 30px; color: #b0b0b0; }
@@ -134,13 +126,13 @@ body {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.2em;
     padding: 15px;
-    width: 80%;
+    width: 90%; /* Скорректировано */
+    margin: 0 auto 30px auto; /* Центрируем */
     border-radius: 8px;
     border: 2px solid #333;
     background-color: #2c2c2c;
     color: #fff;
     text-align: center;
-    margin-bottom: 30px;
 }
 .name-entry-screen input:focus { outline: none; border-color: #2196F3; }
 .name-entry-screen button {
@@ -155,13 +147,11 @@ body {
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
     transition: all 0.3s ease;
+    align-self: center; /* Центрируем кнопку */
 }
 .name-entry-screen button:hover { transform: scale(1.05); }
 
-
-/* =========================================
-   СТИЛИ ДЛЯ ЧЕКБОКСОВ (ОБЩИЕ)
-   ========================================= */
+/* СТИЛИ ДЛЯ ЧЕКБОКСОВ */
 #game-choices form {
     width: 100%;
     display: flex;
@@ -173,59 +163,35 @@ body {
     display: flex;
     align-items: center;
     color: #e0e0e0;
-    font-size: 1rem; /* Используем rem для масштабируемости */
+    font-size: 1rem;
     width: 90%;
-    max-width: 400px; /* Ограничиваем ширину для читаемости */
-    justify-content: flex-start; /* Выравниваем по левому краю */
+    max-width: 400px;
+    justify-content: flex-start;
     text-align: left;
 }
-.checkbox-container input {
-    margin-right: 15px;
-    transform: scale(1.5);
-    flex-shrink: 0;
-}
+.checkbox-container input { margin-right: 15px; transform: scale(1.5); flex-shrink: 0; }
 
-
-/* =========================================
-   КНОПКА НАЗАД (ОБЩИЕ СТИЛИ)
-   ========================================= */
-#navigation-container {
-    position: absolute;
-    bottom: 15px;
-    left: 20px;
-    z-index: 10;
-}
+/* КНОПКА НАЗАД */
+#navigation-container { position: absolute; bottom: 15px; left: 20px; z-index: 10; }
 #back-button {
     font-family: 'Montserrat', sans-serif;
     background-color: rgba(40, 40, 40, 0.7);
     border: 1px solid #555;
     color: #ccc;
-    font-size: 1rem; /* Адаптивный размер шрифта */
+    font-size: 1rem;
     padding: 10px 15px;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
-#back-button:hover {
-    background-color: rgba(60, 60, 60, 0.9);
-    color: #fff;
-    border-color: #777;
-}
-
+#back-button:hover { background-color: rgba(60, 60, 60, 0.9); color: #fff; border-color: #777; }
 
 /* ===============================================================
    !!! МЕДИА-ЗАПРОС ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ !!!
-   Стили ниже применяются, только если ширина экрана 768px или меньше
    =============================================================== */
 @media (max-width: 768px) {
-    body {
-        /* На мобильных устройствах выравниваем по верху, а не по центру */
-        align-items: flex-start; 
-        padding: 0; /* Убираем отступы у body */
-    }
-
+    body { align-items: flex-start; padding: 0; }
     .game-world {
-        /* Убираем жесткую высоту и пропорции, растягиваем на весь экран */
         height: 100vh;
         width: 100vw;
         max-height: none;
@@ -233,56 +199,46 @@ body {
         border-radius: 0;
         box-shadow: none;
     }
-
-    .image-container {
-        /* Уменьшаем высоту картинки, чтобы осталось место для текста и кнопок */
-        height: 40%; 
-    }
-
-    #game-text {
-        /* Задаем размер шрифта в более подходящих для мобильных единицах */
-        font-size: 1.1rem; 
-        line-height: 1.6;
-    }
+    .image-container { height: 40%; }
+    #game-text { font-size: 1.1rem; line-height: 1.6; }
     
+    /* ИСПРАВЛЕНИЕ #1: Предотвращаем наложение текста на картинку */
     .text-container {
-        padding: 15px; /* Фиксированный отступ */
+        padding: 15px;
+        flex-grow: 1; /* Этот блок должен занимать все оставшееся место */
+        flex-shrink: 1;
+        min-height: 0; /* Важное свойство для правильной работы flex-grow в сложных случаях */
     }
-
     .choices-container {
-        padding: 15px; /* Фиксированный отступ */
-        /* Позволяем контейнеру занимать больше места при необходимости */
-        flex-grow: 1; 
+        padding: 15px;
+        flex-grow: 0; /* Этот блок не должен растягиваться */
+        flex-shrink: 0;
         overflow-y: auto;
     }
 
-    #game-choices {
-        /* САМОЕ ВАЖНОЕ: Кнопки теперь будут идти друг под другом */
-        flex-direction: column; 
-        gap: 15px; /* Увеличим отступ между кнопками */
-        width: 100%;
-    }
-
-    #game-choices button {
-        /* Делаем кнопки на всю ширину для удобства нажатия */
-        width: 100%; 
-        font-size: 1.1rem; /* Четкий размер шрифта */
-        padding: 18px 20px; /* Увеличим паддинг для удобства нажатия */
-        min-width: unset; /* Сбрасываем минимальную ширину */
-    }
+    #game-choices { flex-direction: column; gap: 15px; width: 100%; }
+    #game-choices a, #game-choices button { width: 100%; font-size: 1.1rem; padding: 18px 20px; min-width: unset; }
     
+    /* ИСПРАВЛЕНИЕ #2: Увеличиваем шрифт в чекбоксах */
     .checkbox-container {
-        font-size: 1rem;
+        font-size: 1.1rem; /* Увеличен */
         width: 100%;
     }
 
-    #navigation-container {
-        bottom: 10px;
-        left: 10px;
-    }
-
+    /* ИСПРАВЛЕНИЕ #3: Увеличиваем кнопку "Назад" */
+    #navigation-container { bottom: 10px; left: 10px; }
     #back-button {
-        font-size: 0.9rem;
-        padding: 8px 12px;
+        font-size: 1rem;      /* Увеличен */
+        padding: 12px 18px; /* Значительно увеличен */
     }
+}
+
+/* ===============================================================
+   !!! ИСПРАВЛЕНИЕ #4: УВЕЛИЧИВАЕМ КРЕСТИК В PHOTOSWIPE !!!
+   =============================================================== */
+.pswp__button--close {
+    width: 54px !important; /* Увеличиваем ширину */
+    height: 54px !important; /* Увеличиваем высоту */
+    background-size: 28px 28px !important; /* Увеличиваем сам крестик */
+    opacity: 0.9 !important;
 }
