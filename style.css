@@ -1,8 +1,11 @@
 /* =========================================
-   ПОЛНЫЙ КОД ДЛЯ STYLE.CSS
+   ОБЩИЕ СТИЛИ (ДЛЯ ВСЕХ ЭКРАНОВ)
    ========================================= */
+:root {
+    /* Задаем базовый размер шрифта для лучшей адаптивности */
+    font-size: 16px; 
+}
 
-/* Общие стили для страницы */
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
@@ -10,19 +13,27 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh; /* Используем min-height для гибкости */
+    padding: 10px; /* Небольшой отступ на случай очень маленьких экранов */
+    box-sizing: border-box;
 }
 
-/* 
- * Главный контейнер игры - наш "экран" 16:9 
- */
+/* Класс для скрытия элементов */
+.hidden {
+    display: none !important;
+}
+
+/* =========================================
+   СТИЛИ ДЛЯ ДЕСКТОПА (ШИРОКИЕ ЭКРАНЫ)
+   ========================================= */
+
+/* Главный контейнер игры */
 .game-world {
     position: relative;
     background-color: #1a1a1a;
     aspect-ratio: 16 / 9;
-    height: 95vh;
-    max-height: 95vh;
+    height: 90vh; /* Немного уменьшим, чтобы был запас */
+    max-height: 90vh;
     max-width: 95vw;
     border-radius: 12px;
     box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
@@ -31,54 +42,46 @@ body {
     flex-direction: column;
 }
 
-/* === ЗОНА ИЗОБРАЖЕНИЯ (Верхняя часть) === */
+/* Зона изображения */
 .image-container {
-    height: 55%; /* Занимает 55% высоты */
-    flex-shrink: 0; /* Запрещаем этому блоку сжиматься */
+    height: 55%;
+    flex-shrink: 0;
 }
 #game-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: none;
+    cursor: zoom-in; /* <--- Строка Зума */
 }
 
-/* === ЗОНА ТЕКСТА (Центральная, гибкая часть) === */
+/* Зона текста */
 .text-container {
-    /* Убрали фиксированную высоту! */
-    flex-grow: 1; /* Позволяем этому блоку расти и занимать все доступное место */
+    flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 1vh 5%;
-    overflow-y: auto; /* Позволяем прокрутку, если текст все-таки не влезет */
-    
-    /* Свойства для скрытия самого скроллбара */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
-/* Скрываем скроллбар для Chrome, Safari, Opera */
-.text-container::-webkit-scrollbar {
-    display: none;
-}
+.text-container::-webkit-scrollbar { display: none; }
 #game-text {
     color: #e0e0e0;
-    font-size: 2.2vh;
-    line-height: 1.5; 
+    font-size: 2.2vh; /* Оставляем vh для десктопа, где высота стабильна */
+    line-height: 1.5;
     text-align: center;
     white-space: pre-wrap;
 }
 
-/* === ЗОНА КНОПОК (Нижняя часть) === */
+/* Зона кнопок */
 .choices-container {
-    flex-shrink: 0; /* Запрещаем этому блоку сжиматься */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2vh 0 3vh 0; /* Отступы сверху и снизу */
+    flex-shrink: 0;
+    padding: 2vh 0 3vh 0;
 }
 #game-choices {
     width: 90%;
+    margin: 0 auto;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -86,8 +89,6 @@ body {
     align-items: center;
     gap: 1.5vh 1.5vw;
 }
-
-/* Стили самих кнопок */
 #game-choices button {
     font-family: 'Montserrat', sans-serif;
     background: linear-gradient(45deg, #2196F3, #1976D2);
@@ -98,53 +99,21 @@ body {
     font-weight: 600;
     padding: 1.8vh 3vh;
     cursor: pointer;
-    text-align: center;
     box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
     transition: all 0.3s ease;
-    
-    /* Гибкость кнопок */
     flex-grow: 1;
     flex-basis: auto;
     min-width: 150px;
 }
-
 #game-choices button:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 25px rgba(33, 150, 243, 0.6);
 }
 
-/* Стили для чекбоксов */
-#game-choices form {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5vh;
-}
-.checkbox-container {
-    display: flex;
-    align-items: center;
-    color: #e0e0e0;
-    font-size: 1.8vh;
-    width: 70%;
-    justify-content: center;
-}
-.checkbox-container input {
-    margin-right: 15px;
-    transform: scale(1.5);
-}
 
-
-/* ==================================
-   СТИЛИ ДЛЯ ЭКРАНА ВВОДА ИМЕНИ
-   ================================== */
-
-/* Класс для скрытия элементов */
-.hidden {
-    display: none !important;
-}
-
-/* Стили для экрана ввода имени */
+/* =========================================
+   ЭКРАН ВВОДА ИМЕНИ (ОБЩИЕ СТИЛИ)
+   ========================================= */
 .name-entry-screen {
     display: flex;
     flex-direction: column;
@@ -159,18 +128,8 @@ body {
     max-width: 500px;
     text-align: center;
 }
-
-.name-entry-screen h2 {
-    font-size: 2em;
-    margin-bottom: 10px;
-}
-
-.name-entry-screen p {
-    font-size: 1.1em;
-    margin-bottom: 30px;
-    color: #b0b0b0;
-}
-
+.name-entry-screen h2 { font-size: 2em; margin-bottom: 10px; }
+.name-entry-screen p { font-size: 1.1em; margin-bottom: 30px; color: #b0b0b0; }
 .name-entry-screen input {
     font-family: 'Montserrat', sans-serif;
     font-size: 1.2em;
@@ -183,12 +142,7 @@ body {
     text-align: center;
     margin-bottom: 30px;
 }
-
-.name-entry-screen input:focus {
-    outline: none;
-    border-color: #2196F3;
-}
-
+.name-entry-screen input:focus { outline: none; border-color: #2196F3; }
 .name-entry-screen button {
     font-family: 'Montserrat', sans-serif;
     background: linear-gradient(45deg, #2196F3, #1976D2);
@@ -202,7 +156,133 @@ body {
     box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
     transition: all 0.3s ease;
 }
+.name-entry-screen button:hover { transform: scale(1.05); }
 
-.name-entry-screen button:hover {
-    transform: scale(1.05);
+
+/* =========================================
+   СТИЛИ ДЛЯ ЧЕКБОКСОВ (ОБЩИЕ)
+   ========================================= */
+#game-choices form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    color: #e0e0e0;
+    font-size: 1rem; /* Используем rem для масштабируемости */
+    width: 90%;
+    max-width: 400px; /* Ограничиваем ширину для читаемости */
+    justify-content: flex-start; /* Выравниваем по левому краю */
+    text-align: left;
+}
+.checkbox-container input {
+    margin-right: 15px;
+    transform: scale(1.5);
+    flex-shrink: 0;
+}
+
+
+/* =========================================
+   КНОПКА НАЗАД (ОБЩИЕ СТИЛИ)
+   ========================================= */
+#navigation-container {
+    position: absolute;
+    bottom: 15px;
+    left: 20px;
+    z-index: 10;
+}
+#back-button {
+    font-family: 'Montserrat', sans-serif;
+    background-color: rgba(40, 40, 40, 0.7);
+    border: 1px solid #555;
+    color: #ccc;
+    font-size: 1rem; /* Адаптивный размер шрифта */
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+#back-button:hover {
+    background-color: rgba(60, 60, 60, 0.9);
+    color: #fff;
+    border-color: #777;
+}
+
+
+/* ===============================================================
+   !!! МЕДИА-ЗАПРОС ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ !!!
+   Стили ниже применяются, только если ширина экрана 768px или меньше
+   =============================================================== */
+@media (max-width: 768px) {
+    body {
+        /* На мобильных устройствах выравниваем по верху, а не по центру */
+        align-items: flex-start; 
+        padding: 0; /* Убираем отступы у body */
+    }
+
+    .game-world {
+        /* Убираем жесткую высоту и пропорции, растягиваем на весь экран */
+        height: 100vh;
+        width: 100vw;
+        max-height: none;
+        max-width: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .image-container {
+        /* Уменьшаем высоту картинки, чтобы осталось место для текста и кнопок */
+        height: 40%; 
+    }
+
+    #game-text {
+        /* Задаем размер шрифта в более подходящих для мобильных единицах */
+        font-size: 1.1rem; 
+        line-height: 1.6;
+    }
+    
+    .text-container {
+        padding: 15px; /* Фиксированный отступ */
+    }
+
+    .choices-container {
+        padding: 15px; /* Фиксированный отступ */
+        /* Позволяем контейнеру занимать больше места при необходимости */
+        flex-grow: 1; 
+        overflow-y: auto;
+    }
+
+    #game-choices {
+        /* САМОЕ ВАЖНОЕ: Кнопки теперь будут идти друг под другом */
+        flex-direction: column; 
+        gap: 15px; /* Увеличим отступ между кнопками */
+        width: 100%;
+    }
+
+    #game-choices button {
+        /* Делаем кнопки на всю ширину для удобства нажатия */
+        width: 100%; 
+        font-size: 1.1rem; /* Четкий размер шрифта */
+        padding: 18px 20px; /* Увеличим паддинг для удобства нажатия */
+        min-width: unset; /* Сбрасываем минимальную ширину */
+    }
+    
+    .checkbox-container {
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    #navigation-container {
+        bottom: 10px;
+        left: 10px;
+    }
+
+    #back-button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+    }
 }
