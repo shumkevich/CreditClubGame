@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Квест "КредитКлаб"</title>
+    <title>Квест "Кредит.Клаб"</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin.min.css">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- НОВЫЙ ЭКРАН: Ввод имени -->
     <div id="name-entry-screen" class="name-entry-screen">
         <h2>Добро пожаловать в "Кредит.Клаб"</h2>
         <p>Чтобы начать обучение, представьтесь, пожалуйста.</p>
@@ -16,7 +19,6 @@
         <button id="confirm-name-button">Начать</button>
     </div>
 
-    <!-- Основной игровой экран (изначально будет скрыт) -->
     <div id="game-world" class="game-world hidden">
         <div class="image-container">
             <img id="game-image" src="" alt="Иллюстрация к сцене">
@@ -27,8 +29,49 @@
         <div class="choices-container">
             <div id="game-choices"></div>
         </div>
+        <div id="navigation-container">
+            <button id="back-button" class="hidden">← Назад</button>
+        </div>
     </div>
 
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="pswp__bg"></div>
+        <div class="pswp__scroll-wrap">
+            <div class="pswp__container">
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+                <div class="pswp__item"></div>
+            </div>
+            <div class="pswp__ui pswp__ui--hidden">
+                <div class="pswp__top-bar">
+                    <div class="pswp__counter"></div>
+                    <button class="pswp__button pswp__button--close" title="Закрыть (Esc)"></button>
+                    <button class="pswp__button pswp__button--zoom" title="Увеличить/уменьшить"></button>
+                    <div class="pswp__preloader">
+                        <div class="pswp__preloader__icn">
+                          <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                    <div class="pswp__share-tooltip"></div> 
+                </div>
+                <button class="pswp__button pswp__button--arrow--left" title="Предыдущая (стрелка влево)">
+                </button>
+                <button class="pswp__button pswp__button--arrow--right" title="Следующая (стрелка вправо)">
+                </button>
+                <div class="pswp__caption">
+                    <div class="pswp__caption__center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+    
     <script src="quest.js"></script>
     <script src="script.js"></script>
 </body>
