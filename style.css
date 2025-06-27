@@ -57,7 +57,7 @@ body {
 /* ЭКРАН ВВОДА ИМЕНИ */
 .name-entry-screen {
     display: flex; flex-direction: column; align-items: stretch; justify-content: center;
-    padding: 40px; background-color: #1a1a1a; border-radius: 12px;
+    padding: 40px; background-color: #1e1e1e; border-radius: 12px;
     box-shadow: 0 0 40px rgba(255, 255, 255, 0.1); color: #e0e0e0;
     width: 90%; max-width: 500px; text-align: left;
 }
