@@ -1,3 +1,22 @@
+Отлично, понял задачу. Упрощаем отчет: оставляем только общее время и количество допущенных ошибок. Это сделает итоговое сообщение гораздо более компактным и читаемым.
+
+Для этого нам нужно будет изменить только один файл — script.js. Мы добавим в него счетчик ошибок и изменим формат финального отчета.
+
+Обновленный script.js
+Что нового в этом коде:
+
+Добавлена новая переменная wrongAnswerCount для подсчета ошибок.
+
+Эта переменная обнуляется при каждом старте игры.
+
+В логику обработки ответов добавлены проверки: если игрок выбирает заведомо неверный вариант (например, предлагает встретиться в выходной день или не сообщает в чат), счетчик wrongAnswerCount увеличивается.
+
+Финальный отчет теперь содержит только имя, время и количество ошибок.
+
+Инструкция: Пожалуйста, полностью замените содержимое вашего файла script.js на код ниже.
+
+JavaScript
+
 // ================== ПОЛУЧЕНИЕ ЭЛЕМЕНТОВ СО СТРАНИЦЫ ==================
 const nameEntryScreen = document.getElementById('name-entry-screen');
 const nameInput = document.getElementById('player-name-input');
@@ -20,12 +39,13 @@ let currentSceneName = null;
 let sceneHistory = [];
 // --- Переменные для логирования ---
 let startTime;
-let userAnswers = [];
+let wrongAnswerCount = 0; // --- НОВЫЙ СЧЕТЧИК ОШИБОК ---
 
 
 // ================== ЛОГИКА ДЛЯ ПРОСМОТРА ИЗОБРАЖЕНИЙ ==================
 const ZOOM_STEP_FACTOR = 1.15; 
 gameImageElement.addEventListener('click', () => {
+    // ... (этот блок остается без изменений) ...
     if (!gameImageElement.getAttribute('src')) { return; }
     const options = { index: 0, history: false, closeOnScroll: false, mouseUsed: false, wheelToZoom: false, maxSpreadZoom: 4, getDoubleTapZoom: function(isMouseClick, item) { if (item.currZoomLevel > item.initialZoomLevel) { return item.initialZoomLevel; } return item.initialZoomLevel * 2.5; } };
     const items = [{ src: gameImageElement.src, w: gameImageElement.naturalWidth, h: gameImageElement.naturalHeight }];
@@ -42,14 +62,13 @@ confirmNameButton.addEventListener('click', () => {
     const name = nameInput.value.trim();
     if (name) {
         playerName = name;
-        // Запускаем отсчет и сбрасываем лог
+        // Запускаем отсчет и сбрасываем счетчики
         startTime = new Date();
-        userAnswers = [];
+        wrongAnswerCount = 0; // --- СБРОС СЧЕТЧИКА ---
 
         nameEntryScreen.classList.add('hidden');
         gameWorld.classList.remove('hidden');
-        // Логируем самое первое действие
-        logAndProceed('start', { text: 'Начать игру', next_scene: 'start' });
+        renderScene('start');
     } else {
         alert("Пожалуйста, введите ваше имя.");
     }
@@ -83,9 +102,8 @@ function renderScene(sceneName, isGoingBack = false) {
     else if (scene.next_scene) { renderInfoScene(scene); }
 }
 
-// Вспомогательная функция для логирования и перехода
-function logAndProceed(fromScene, choice, choiceIndex = 0) {
-    userAnswers.push({ from: fromScene, index: choiceIndex });
+// Вспомогательная функция для перехода
+function proceedToNextScene(choice) {
     renderScene(choice.next_scene);
 }
 
@@ -104,45 +122,48 @@ function renderStandardScene(scene) {
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
 
-            // Используем 'mousedown' вместо 'click', чтобы ссылка сгенерировалась до перехода
             link.addEventListener('mousedown', function(e) {
                 try {
+                    // 1. Считаем время
                     const endTime = new Date();
                     const timeDiff = Math.round((endTime - startTime) / 1000);
                     const minutes = Math.floor(timeDiff / 60);
                     const seconds = timeDiff % 60;
                     const timeStr = `${minutes} мин ${seconds} сек`;
-
-                    const answersStr = userAnswers.map(ans => `${ans.from}:${ans.index}`).join(';');
                     
+                    // 2. --- НОВЫЙ ФОРМАТ ОТЧЕТА ---
                     const report = {
                         name: playerName,
                         time: timeStr,
-                        log: answersStr
+                        mistakes: wrongAnswerCount
                     };
 
-                    // --- ИСПРАВЛЕНИЕ ЗДЕСЬ ---
-                    // Эта конструкция правильно кодирует русские (и другие) символы в Base64
                     const reportStr = JSON.stringify(report);
                     const encodedReport = btoa(unescape(encodeURIComponent(reportStr)));
 
                     const baseMessage = "Добрый день Никита, я прошел свою первую тестовую сделку.";
                     const finalMessage = `${baseMessage}\n\nОтчет:\n${encodedReport}`;
                     
-                    // Обновляем href у ссылки прямо перед переходом
                     e.currentTarget.href = `https://t.me/Shumkov_cc?text=${encodeURIComponent(finalMessage)}`;
 
                 } catch (err) {
                     console.error("Ошибка при формировании отчета:", err);
                 }
             });
-
             gameChoicesElement.appendChild(link);
 
         } else {
             const button = document.createElement('button');
             button.innerText = choice.text;
-            button.addEventListener('click', () => logAndProceed(currentSceneName, choice, index));
+            button.addEventListener('click', () => {
+                // --- Проверяем, является ли выбор ошибочным ---
+                // Список "неправильных" сцен, куда ведут ошибочные выборы
+                const failScenes = ["block3_fail1", "block3_fail2", "block4_fail", "block7_fail"];
+                if (failScenes.includes(choice.next_scene)) {
+                    wrongAnswerCount++;
+                }
+                proceedToNextScene(choice);
+            });
             gameChoicesElement.appendChild(button);
         }
     });
@@ -151,13 +172,14 @@ function renderStandardScene(scene) {
 function renderInfoScene(scene) {
     const button = document.createElement('button');
     button.innerText = "Продолжить";
-    button.addEventListener('click', () => logAndProceed(currentSceneName, scene, 0));
+    button.addEventListener('click', () => proceedToNextScene(scene));
     gameChoicesElement.appendChild(button);
 }
 
 function renderCheckboxScene(scene) {
     const form = document.createElement('form');
     scene.choices.forEach((choice, index) => {
+        // ... (код создания чекбоксов остается без изменений) ...
         const div = document.createElement('div');
         div.className = 'checkbox-container';
         const input = document.createElement('input');
@@ -179,10 +201,10 @@ function renderCheckboxScene(scene) {
         const correctChoices = scene.choices.filter(c => c.correct).length;
         
         if (checkedInputs === correctChoices) {
-            userAnswers.push({ from: currentSceneName, index: 'all_correct' });
             renderScene(scene.next_scene_success);
         } else {
-            userAnswers.push({ from: currentSceneName, index: 'fail' });
+            // --- Считаем ошибку при неверном ответе в чекбоксах ---
+            wrongAnswerCount++;
             renderScene(scene.next_scene_fail);
         }
     });
